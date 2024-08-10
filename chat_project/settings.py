@@ -33,7 +33,7 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = 'your_project_name.asgi.application'
 
-
+"""
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -42,6 +42,19 @@ CHANNEL_LAYERS = {
         },
     },
 }
+"""
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'rediss://red-cqrsrgt6l47c739ugtd0:JJ0wXXmVOtMiEySLiqQHLGU4dbPkcIYp@oregon-redis.render.com:6379/1',  # use the external URL
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'PASSWORD': 'JJ0wXXmVOtMiEySLiqQHLGU4dbPkcIYp',  # add the password if needed
+            'SSL': True,  # ensure SSL is enabled for external connections
+        }
+    }
+}
+
 
 
 MIDDLEWARE = [
