@@ -19,4 +19,5 @@ COPY . /app/
 EXPOSE 8000
 
 # Command to run the application
-CMD ["daphne", "-p", "8000", "chat_project.asgi:application"]
+#CMD ["daphne", "-p", "8000", "chat_project.asgi:application"]
+CMD ["daphne", "-p", "8000", "-b", "0.0.0.0", "chat_project.asgi:application"]
