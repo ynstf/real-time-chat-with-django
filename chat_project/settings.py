@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,14 +44,31 @@ CHANNEL_LAYERS = {
     },
 }
 """
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [("rediss://red-cqrsrgt6l47c739ugtd0:JJ0wXXmVOtMiEySLiqQHLGU4dbPkcIYp@oregon-redis.render.com:6379")],
+
+
+
+
+# Detect the environment
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')  # Default to 'development'
+
+if ENVIRONMENT == 'production':
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [("rediss://red-cqrsrgt6l47c739ugtd0:JJ0wXXmVOtMiEySLiqQHLGU4dbPkcIYp@oregon-redis.render.com:6379")],
+            },
         },
-    },
-}
+    }
+else:  # development settings
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('127.0.0.1', 6379)],
+            },
+        },
+    }
 
 
 CORS_ALLOWED_ORIGINS = ["*"]

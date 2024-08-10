@@ -12,5 +12,6 @@ chack the connection:
     redis-cli.exe ping
 
 to run the project:
+    set DJANGO_ENV=development
     daphne -p 8000 chat_project.asgi:application
 
