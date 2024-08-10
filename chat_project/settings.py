@@ -16,7 +16,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']  # for testing, use '*' to allow all hosts
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -28,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'channels',
+    'corsheaders',
     'chat',
 ]
 
@@ -43,20 +43,18 @@ CHANNEL_LAYERS = {
     },
 }
 """
-
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [
-                'rediss://red-cqrsrgt6l47c739ugtd0:JJ0wXXmVOtMiEySLiqQHLGU4dbPkcIYp@oregon-redis.render.com:6379'
-            ],
+            "hosts": [("rediss://red-cqrsrgt6l47c739ugtd0:JJ0wXXmVOtMiEySLiqQHLGU4dbPkcIYp@oregon-redis.render.com:6379")],
         },
     },
 }
 
 
-
+CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 MIDDLEWARE = [
@@ -67,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'chat_project.urls'
