@@ -1,0 +1,16 @@
+python version:
+    Python 3.9.7
+
+install requiments:
+    pip install -r requirements.txt
+
+to run redis-server :
+    cd redis-windows
+    redis-server.exe redis.conf
+
+chack the connection:
+    redis-cli.exe ping
+
+to run the project:
+    daphne -p 8000 chat_project.asgi:application
+
