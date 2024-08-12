@@ -1,6 +1,8 @@
 sys/
 .vscode
 
+staticfiles
+
 # Created by https://www.gitignore.io
 
 ### OSX ###
