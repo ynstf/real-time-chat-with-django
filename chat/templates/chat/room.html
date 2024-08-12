@@ -1,46 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Chat Room</title>
-</head>
-<body>
+{% extends "chat/base.html" %}
+
+{% block extra_head %}
+    <style>
+        #chat-log {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #chat-message-input {
+            width: calc(100% - 70px);
+            padding: 5px;
+        }
+        #chat-message-submit {
+            width: 60px;
+            padding: 5px;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
     <h1>Room: {{ room_name }}</h1>
-    <div id="chat-log"></div>
-    <input id="chat-message-input" type="text" size="100">
+    <div id="chat-log">
+        {% for message in messages %}
+            <div><strong>{{ message.sender.username }}:</strong> {{ message.content }}</div>
+        {% endfor %}
+    </div>
+        <input id="chat-message-input" type="text" size="100" >
     <input id="chat-message-submit" type="button" value="Send">
+    <div id="error-message" class="error-message">Message cannot be empty.</div>
 
     <script>
         const roomName = "{{ room_name }}";
         const chatSocket = new WebSocket(
-            (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + 
-            window.location.host + 
+            (window.location.protocol === 'https:' ? 'wss://' : 'ws://') +
+            window.location.host +
             '/ws/chat/' + roomName + '/'
         );
-
+        const chatLog = document.querySelector('#chat-log');
+        const messageInput = document.querySelector('#chat-message-input');
+        const messageSubmit = document.querySelector('#chat-message-submit');
+        const errorMessage = document.querySelector('#error-message');
+    
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').innerHTML += (data.message + '<br>');
+            chatLog.innerHTML += (`<strong>${data.user}</strong>: ${data.message}<br>`);
+            chatLog.scrollTop = chatLog.scrollHeight;
         };
-
+    
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
-
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {
-                document.querySelector('#chat-message-submit').click();
+    
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'user': {{request.user.id}},
+                    'room': {{room.id}},
+                }));
+                messageInput.value = '';
+                errorMessage.style.display = 'none';
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        }
+    
+        messageInput.focus();
+        messageInput.onkeyup = function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         };
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
-        };
+    
+        messageSubmit.onclick = sendMessage;
     </script>
-</body>
-</html>
+
+    <p><a href="{% url 'index' %}">Back to Rooms</a></p>
+{% endblock %}
