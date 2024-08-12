@@ -64,4 +64,13 @@ def join(request,id):
     return redirect('room',room_name=room.name)
 
 
+@login_required
+def leave(request,id):
+    room = get_object_or_404(ChatRoom, id=id)
+    user = request.user
+    room.participants.remove(user)
+    room.save()
+    return redirect('room',room_name=room.name)
+
+
 
