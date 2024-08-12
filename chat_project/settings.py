@@ -73,7 +73,8 @@ else:  # development settings
 
 CORS_ALLOWED_ORIGINS = []
 CORS_ALLOW_ALL_ORIGINS = True
-
+# Add this line to your settings.py
+CSRF_TRUSTED_ORIGINS = ['https://real-time-chat-with-django.onrender.com']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
