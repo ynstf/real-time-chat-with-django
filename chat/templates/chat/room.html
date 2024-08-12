@@ -28,14 +28,25 @@
 
 {% block content %}
     <h1>Room: {{ room_name }}</h1>
+
     <div id="chat-log">
         {% for message in messages %}
             <div><strong>{{ message.sender.username }}:</strong> {{ message.content }}</div>
         {% endfor %}
     </div>
+
+    {% if request.user in room.participants.all %}
+
         <input id="chat-message-input" type="text" size="100" >
-    <input id="chat-message-submit" type="button" value="Send">
-    <div id="error-message" class="error-message">Message cannot be empty.</div>
+        <input id="chat-message-submit" type="button" value="Send">
+        <div id="error-message" class="error-message">Message cannot be empty.</div>
+
+    {% else %}
+
+        <a href="{% url 'join' room.id %}"><input id="chat-join-submit" type="button" value="Join"></a>
+
+    {% endif %}
+
 
     <script>
         const roomName = "{{ room_name }}";

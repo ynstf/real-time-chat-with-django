@@ -5,12 +5,12 @@
 <li><a href="{% url 'logout' %}">Logout</a></li>
 <li><a href="{% url 'rooms' %}">Browser all rooms</a></li>
 <li><a href="{% url 'index' %}">My rooms</a></li>
-<h3>Your Chat Rooms:</h3>
+<h3>Chat Rooms avaliable:</h3>
 <ul>
-    {% for room in user_rooms %}
+    {% for room in rooms %}
     <li><a href="{% url 'room' room.name %}">{{ room.name }}</a></li>
     {% empty %}
-    <li>You haven't joined any chat rooms yet.</li>
+    <li>We haven't any chat rooms yet.</li>
     {% endfor %}
 </ul>
 

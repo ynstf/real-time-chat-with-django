@@ -46,3 +46,22 @@ def room(request, room_name):
                 'room':room}
     return render(request, 'chat/room.html', context)
 
+
+
+@login_required
+def rooms(request):
+    rooms = ChatRoom.objects.all()
+    context = {'rooms':rooms}
+    return render(request, 'chat/rooms.html', context)
+
+
+@login_required
+def join(request,id):
+    room = get_object_or_404(ChatRoom, id=id)
+    user = request.user
+    room.participants.add(user)
+    room.save()
+    return redirect('room',room_name=room.name)
+
+
+
