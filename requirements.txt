@@ -5,4 +5,4 @@ Django
 redis
 django-redis
 django-cors-headers
-
+python-dotenv

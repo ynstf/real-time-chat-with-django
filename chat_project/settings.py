@@ -1,5 +1,10 @@
 from pathlib import Path
 import os
+from os import getenv
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,6 +65,20 @@ if ENVIRONMENT == 'production':
             },
         },
     }
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': getenv('PGDATABASE'),
+            'USER': getenv('PGUSER'),
+            'PASSWORD': getenv('PGPASSWORD'),
+            'HOST': getenv('PGHOST'),
+            'PORT': getenv('PGPORT', 5432),
+            'OPTIONS': {
+            'sslmode': 'require',
+            },
+        }
+        }
 else:  # development settings
     CHANNEL_LAYERS = {
         'default': {
@@ -68,6 +87,13 @@ else:  # development settings
                 "hosts": [('127.0.0.1', 6379)],
             },
         },
+    }
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 
 
@@ -116,12 +142,7 @@ LOGOUT_REDIRECT_URL = 'login'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 
 # Password validation
