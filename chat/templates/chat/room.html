@@ -27,6 +27,7 @@
 {% endblock %}
 
 {% block content %}
+
     <h1>Room: {{ room_name }}</h1>
 
     <div id="chat-log">
@@ -40,7 +41,14 @@
         <input id="chat-message-input" type="text" size="100" >
         <input id="chat-message-submit" type="button" value="Send">
         <div id="error-message" class="error-message">Message cannot be empty.</div>
-        <p><a href="{% url 'leave' room.id %}"><input id="chat-join-submit" type="button" value="you can Leave this room"></a></p>
+        
+        <p >
+            <a href="{% url 'leave' room.id %}" >
+                <input style="background-color: #ff0000;" id="chat-leave-submit" type="button" value="you can Leave this room">
+            </a>
+        </p>
+
+
 
     {% else %}
 
@@ -61,6 +69,9 @@
         const messageInput = document.querySelector('#chat-message-input');
         const messageSubmit = document.querySelector('#chat-message-submit');
         const errorMessage = document.querySelector('#error-message');
+        
+        
+        
     
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);

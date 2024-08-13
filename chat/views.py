@@ -43,7 +43,8 @@ def room(request, room_name):
     messages = room.messages.order_by('timestamp')
     context = {'room_name': room_name,
                 'messages': messages,
-                'room':room}
+                'room':room,            
+            }
     return render(request, 'chat/room.html', context)
 
 
